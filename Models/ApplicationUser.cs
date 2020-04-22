@@ -6,7 +6,6 @@ namespace ToDoList.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public int Id { get; set; }
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
