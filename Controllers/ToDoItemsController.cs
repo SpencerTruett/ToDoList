@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     public class ToDoItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
