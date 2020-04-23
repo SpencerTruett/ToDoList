@@ -26,14 +26,49 @@ namespace ToDoList.Controllers
         }
 
         // GET: ToDoItems
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filterButton)
         {
             var user = await GetCurrentUserAsync();
-            var items = await _context.ToDoList
-                .Where(si => si.ApplicationUserId == user.Id)
-                .ToListAsync();
 
-            return View(items);
+            if (filterButton == "To Do")
+            {
+                var items = await _context.ToDoList
+                  .Where(ti => ti.ApplicationUserId == user.Id)
+                  .Where(ti => ti.ToDoStatusId == 1)
+                  .Include(ti => ti.ToDoStatus)
+                  .ToListAsync();
+
+
+                return View(items);
+            }
+            else if (filterButton == "Progress")
+            {
+                var items = await _context.ToDoList
+                  .Where(ti => ti.ApplicationUserId == user.Id)
+                  .Where(ti => ti.ToDoStatusId == 2)
+                  .Include(ti => ti.ToDoStatus)
+                  .ToListAsync();
+
+                return View(items);
+            }
+            else if (filterButton == "Done")
+            {
+                var items = await _context.ToDoList
+                  .Where(ti => ti.ApplicationUserId == user.Id)
+                  .Where(ti => ti.ToDoStatusId == 3)
+                  .Include(ti => ti.ToDoStatus)
+                  .ToListAsync();
+
+                return View(items);
+            }
+            else
+            {
+                var items = await _context.ToDoList
+                 .Where(si => si.ApplicationUserId == user.Id)
+                 .ToListAsync();
+
+                return View(items);
+            }
         }
 
         // GET: ToDoItems/Details/5
@@ -151,9 +186,8 @@ namespace ToDoList.Controllers
             }
 
             var toDoItem = await _context.ToDoList
-                .Include(t => t.ApplicationUser)
-                .Include(t => t.ToDoStatus)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(i => i.ToDoStatus)
+                .FirstOrDefaultAsync(i => i.Id == id);
             if (toDoItem == null)
             {
                 return NotFound();
