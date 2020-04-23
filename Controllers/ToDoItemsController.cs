@@ -65,6 +65,7 @@ namespace ToDoList.Controllers
             {
                 var items = await _context.ToDoList
                  .Where(si => si.ApplicationUserId == user.Id)
+                 .Include(t => t.ToDoStatus)
                  .ToListAsync();
 
                 return View(items);
